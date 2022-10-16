@@ -10,8 +10,8 @@ main:
     jmp compare
 compare:
     cmp %eax, %ebx
-    jle loopbody
-    jmp etexit
+    jne loopbody ;// If eax != ebx jump to loopbody
+    jmp etexit ;// If we get here, jump to exit
 
 loopbody:
     add $1, %eax
