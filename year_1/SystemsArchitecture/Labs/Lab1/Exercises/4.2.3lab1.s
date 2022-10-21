@@ -7,27 +7,27 @@
 .globl main
 
 main: 
-    movl $a, %eax
-    movl $b, %ebx
-    cmp %eax, %ebx
+    mov a, %eax
+    mov b, %ebx
+    cmp %ebx, %eax
     jge agreaterthanb
     jmp asmallerthanb
 agreaterthanb:
     mov c, %ecx
-    cmp %ecx, %eax
+    cmp %eax, %ecx
     jge bisthesmallest ;// c >= a >= b
 
-    cmp %ecx, %ebx
+    cmp %ebx, %ecx
     jge bisthesmallest ;// a > c >= b
 
     jmp cisthesmallest ;// a > b > c
     
 asmallerthanb: ;// a < b
     mov c, %ecx
-    cmp %ecx, %eax
+    cmp %eax, %ecx
     jle cisthesmallest ;// c <= a < b
 
-    cmp %ecx, %ebx
+    cmp %ebx, %ecx
     jge aisthesmallest ;// a < b <= c
 
     ;// c > a guaranteed and c < b => a < c < b
