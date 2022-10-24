@@ -19,7 +19,7 @@ loadvaluesloop:
     cmp %ecx, %ebx
     je prepareloop
 
-    mov $counter, (%edi, %ecx, 4)
+    mov %ecx, (%edi, %ecx, 4)
     add $1, %ecx
     mov %ecx, counter
     jmp loadvaluesloop
