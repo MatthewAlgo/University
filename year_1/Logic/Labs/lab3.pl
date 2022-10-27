@@ -22,6 +22,7 @@ insert([], C, [C]).
 insert([H|T], C, [C|[H|T]]) :- C < H.
 insert([H|T], C, [H|L]) :- C >= H, insert(T, C, L).
 
+
 % Qsrt
 split(_, [], [], []).
 % split(H, [I], [I], B) :- H < I.
