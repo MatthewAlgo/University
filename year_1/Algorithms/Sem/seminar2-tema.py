@@ -70,7 +70,7 @@ def caesar_decrypt(text, shift):
     return result
     
 def main():
-    str = caesar_encrypt("Ana are mere si ta-su este zigga bigga", 24)
+    str = caesar_encrypt("Ana are mere", 24)
     print("Encrypted: ", str)
     str = caesar_decrypt(str, 24)
     print("Decrypted: ", str)
