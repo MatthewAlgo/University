@@ -1,6 +1,7 @@
 # Executables
 a.out
 *.out
+*.o
 *.exe
 
 # Directories
