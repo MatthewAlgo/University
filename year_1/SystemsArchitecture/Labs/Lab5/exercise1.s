@@ -6,6 +6,10 @@
     unu: .long 1
     formatcitire: .asciz "%d"
 
+    n: .space 4
+    vectordenumere: .space 100 
+    // Se da un vector de n numere citit de la tastatura, sa se verifice daca numere sunt perfecte
+
     formatafisare: .asciz "Numar afisat: %d\n"
     formatafisaresuma: .asciz "Suma afisata: %d\n"
 
@@ -27,6 +31,13 @@ perfect:
     movl 8(%ebp), %eax
     // Numarul nostru x se afla in eax acum
     // Facem operatii pe ea
+    push %eax
+    push $ebxeste
+    call printf
+    popl %edx
+    popl %edx
+
+    
     mov $1, %ecx
     jmp et_loop
 
@@ -90,60 +101,92 @@ numarul_nu_este_perfect:
     popl %ebp
     ret
 
-.globl main
 
-main:
-    pushl $numar
-    pushl $formatcitire
+// Reading from keyboard procedure here
+readandsolve: 
+    push %ebp
+    mov %esp, %ebp
+
+    // We read number n vroom the keyboard
+    push $n
+    push $formatcitire
+    call scanf
+    popl %ebx
+    popl %ebx
+    
+    // Pampananannananananannam panam
+    // Now we read the vector in a loop
+    mov n, %ecx
+    jmp et_loop_vector_read_and_solve
+
+    pop %ebp
+    ret
+    // Does not return anything
+
+et_loop_vector_read_and_solve: 
+    // We read n numbers from the keyboard
+    // We can read in n as the counter now is remembered in ecx
+    push $n
+    push $formatcitire
     call scanf
     popl %ebx
     popl %ebx
 
-    pushl numar
-    pushl $formatafisare
-    call printf
-    popl %ebx
-    popl %ebx
-
-    pushl $0
-    call fflush
-    popl %ebx
-
-    pushl numar
+    // Acum il avem pe n si putem sa apelam procedura pentru el
+    mov n, %edx
+    mov %edx, numar # Avem nevoie de numar in functie
+    pushl n
     call perfect
     popl %ebx
 
-
-    // Print ebx for debugging
-    pushl %ebx
-    pushl $ebxeste
+    // Print the value of ebx for debugging
+    push %ebx
+    push $ebxeste
     call printf
     popl %edx
     popl %edx
     
-
+    // Resetam suma
+    mov $0, suma
 
     cmp %ebx, unu
     je print_nr_este_perf
     jne print_nr_nu_este_perf
 
-    mov $1, %eax
-    xor %ebx, %ebx
-    int $0x80
+.globl main
 
 print_nr_este_perf:
     pushl $nreperf
     call printf
-    popl %ebx
+    popl %edx
+
+    cmp %ecx, unu
+    je et_exit
+    dec %ecx
+    jmp et_loop_vector_read_and_solve
+
+print_nr_nu_este_perf:
+    pushl $nrnueperf
+    call printf
+    popl %edx
+
+    
+    cmp %ecx, unu
+    je et_exit
+    dec %ecx
+    jmp et_loop_vector_read_and_solve
+
+
+main:
+    call readandsolve
 
     mov $1, %eax
     xor %ebx, %ebx
     int $0x80
 
-print_nr_nu_este_perf:
-    pushl $nrnueperf
-    call printf
-    popl %ebx
+et_exit:
+    pop %ebp
+    ret
 
     mov $1, %eax
     xor %ebx, %ebx
